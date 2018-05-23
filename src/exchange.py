@@ -47,17 +47,17 @@ def stopd():
 	subprocess.call(miner_cli + "stop", shell=True)
 	return 1  
 
-def validClient(arg):
+def validClient(args):
 	print("*******validClient*******")
 
-	if(arg == "exc_cli"):
+	if(args == "exc_cli"):
 		return exc_cli
-	elif(arg == "bob_cli"):
+	elif(args == "bob_cli"):
 		print("returning,", bob_cli)
-		return bob_cli
-	elif(arg == "miner_cli"):
+		return "" + bob_cli
+	elif(args == "miner_cli"):
 		return miner_cli
-	elif(arg == "b_cli"):
+	elif(args == "b_cli"):
 		return b_cli
 	else:
 		return 0
@@ -65,38 +65,40 @@ def validClient(arg):
 #NEED TO FIX RETURN STATEMENT FROM THIS FUNCTION...
 
 
-def validCmd(arg):
-	print("validCmd:" + arg)
+def validCmd(args):
+	print("validCmd:" + args)
 	return 1
 
 if __name__ == "__main__":
 	# parser = argparse.ArgumentParser()
 	# parser.add_argument('block_time', type=int, help='Block generation time interval')
-	next_cmd = 1
-	daemon_services = 0
-	while(next_cmd):
-		cmd = input("\nEnter command: ")
-		if(cmd == "startd"):
-			daemon_services = startd()
-		elif(cmd == "stopd"):
-			daemon_services = stopd()
-		elif(cmd == "exit"):
-			if(daemon_services == 1):
-				daemon_services = stopd()
-			next_cmd = 0
+	next_uinput = 1
+	dservices = 0
+	while(next_uinput):
+		uinput = input("\nEnter command: ")
+		if(uinput == "startd"):
+			dservices = startd()
+		elif(uinput == "stopd"):
+			dservices = stopd()
+		elif(uinput == "exit"):
+			if(dservices == 1):
+				dservices = stopd()
+			next_uinput = 0
 		else:
-			arg = cmd.split()
-			if(daemon_services == 0):
-				daemon_services = startd()
-			if(validClient(arg[0])):
-				arg1 = validCmd(arg[1])
-				print("arg1:" + arg1)
-				if(arg1):
+			args = uinput.split()
+			if(dservices == 0):
+				dservices = startd()
+			if(validClient(args[0])):
+				cmd = validCmd(args[1])
+				print()
+				print("[MAIN] cmd:", cmd)
+				print(cmd)
+				if(cmd):
 					print("made it inside")
-					subprocess.call(str(arg1) + " " + arg[1], shell=True)  
+					subprocess.call(str(cmd) + " " + args[1], shell=True)  
 				else:
 					print("[ERROR] Command not recognized")
 			else:
-				print("[ERROR] Not a valid input: (" + arg[0]+ ") - exc_cli, bob_cli, miner_cli must be given")
+				print("[ERROR] Not a valid input: (" + args[0]+ ") - exc_cli, bob_cli, miner_cli must be given")
 
 #bob-cli getwalletinfo
